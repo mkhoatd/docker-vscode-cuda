@@ -17,6 +17,15 @@ RUN wget -qO- https://update.code.visualstudio.com/${VERSION}/cli-linux-x64/stab
 
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
+RUN mkdir /workspace
+WORKDIR /workspace
+
+RUN  cd /workspace && \
+  uv init && \
+  uv venv && \
+  . .venv/bin/activate && \
+  uv pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+
 ENTRYPOINT ["code", "tunnel", "--accept-server-license-terms"]
 CMD ["--tunnel-id", "${TUNNEL_ID}", "--host-token", "${TUNNEL_TOKEN}", "--name", "${TUNNEL_NAME}"]
 
