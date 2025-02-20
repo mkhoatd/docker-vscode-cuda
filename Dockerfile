@@ -1,15 +1,7 @@
 FROM nvidia/cuda:12.1.1-runtime-ubuntu22.04
 
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
-
-RUN mkdir /workspace
-WORKDIR /workspace
-
-RUN  cd /workspace && \
-  uv init && \
-  uv venv && \
-  . .venv/bin/activate && \
-  uv pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+COPY --from=ghcr.io/mkhoatd/docker-python-cuda:latest /workspace /workspace
 
 # hadolint ignore=DL3008
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive && apt-get install -y --no-install-recommends \
